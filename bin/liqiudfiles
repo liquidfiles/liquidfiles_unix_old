@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'thor'
+require 'liquidfiles'
+
+class LiquidFilesCLI < Thor
+  desc "upload", "Uploads provided files to LiquidFiles"
+  def upload
+    LiquidFiles.upload ["/home/neque/raibow.jpg"], "AXBnQrXq6QDlE4FlyQUUj9"
+  end
+end
+
+LiquidFilesCLI.start
+

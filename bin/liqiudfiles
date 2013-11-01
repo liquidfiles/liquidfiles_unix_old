@@ -3,12 +3,35 @@
 require 'rubygems'
 require 'thor'
 require 'liquidfiles'
+require 'pp'
 
 class LiquidFilesCLI < Thor
-  desc "upload", "Uploads provided files to LiquidFiles"
-  def upload
-    LiquidFiles.upload ["/home/neque/raibow.jpg"], "AXBnQrXq6QDlE4FlyQUUj9"
+
+  desc "upload file1 file2 file3", "Uploads provided files to LiquidFiles"
+  method_option :api_key, :type => :string,  :required => true, :aliases => "-a"
+  #method_option :files, :type => :array, :required => true
+  
+  def upload(*files)
+    pp options
+    
+    pp files    
+
+    lc = LiquidFiles::Client.new options[:api_key] #"AXBnQrXq6QDlE4FlyQUUj9" 
+    pp lc.upload(files)
   end
+
+  desc "message", "Send message"
+  method_option :api_key, :type => :string,  :required => true, :aliases => "-a"
+  method_option :recipients, :type => :array, :required => true, :aliases => "-to"
+  method_option :subject, :type => :string, :required => true, :aliases => "-s"
+  method_option :message, :type => :string, :required => true, :aliases => "-m"
+  method_option :attachments, :type => :array, :required => true, :aliases => "-f"
+
+  def message
+    lc = LiquidFiles::Client.new options[:api_key] #"AXBnQrXq6QDlE4FlyQUUj9" 
+    pp lc.message options[:recipients], options[:subject], options[:message], options[:attachments]
+  end
+
 end
 
 LiquidFilesCLI.start

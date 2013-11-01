@@ -25,5 +25,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "fakeweb"
 
   spec.add_runtime_dependency "curb"
-  spec.add_runtime_dependency "yaml"
+  spec.add_runtime_dependency "thor"
+  spec.add_runtime_dependency "nokogiri"
 end

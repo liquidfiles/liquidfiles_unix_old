@@ -1,5 +1,8 @@
 require 'yaml'
 require 'curb'
+require "net/http"
+require "uri"
+require 'nokogiri'
 require "liquidfiles/version"
 require "liquidfiles/client"
 

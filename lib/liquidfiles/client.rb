@@ -19,6 +19,9 @@ module LiquidFiles
     # files - array of paths to files to be uploaded
     # returns array of server ids of files
     def upload(files)
+      
+      validate_files(files)
+
       c = prepare_curl_request("attachments")    
 
       # Upload one file at a time

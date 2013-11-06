@@ -24,8 +24,8 @@ module LiquidFiles
         end
       end
 
-      @settings[:accepted_filetypes] = xml.user.accepted_filetypes.content.split ","
-      @settings[:blocked_extensions] = xml.user.blocked_extensions.content.split ","
+      @settings[:accepted_filetypes] = xml.user.accepted_filetypes.content.split ", "
+      @settings[:blocked_extensions] = xml.user.blocked_extensions.content.split ", "
 
     end
 

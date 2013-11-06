@@ -24,8 +24,8 @@ X-Rack-Cache: miss
   <max_file_size type="integer"></max_file_size>
   <change_expiration type="boolean">true</change_expiration>
   <default_file_expiration type="integer">30</default_file_expiration>
-  <accepted_filetypes></accepted_filetypes>
-  <blocked_extensions>exe, vbs, pif, scr, bat, cmd, com, tar</blocked_extensions>
+  <accepted_filetypes>application/x-tar, application/zip</accepted_filetypes>
+  <blocked_extensions></blocked_extensions>
   <default_authorization type="integer">0</default_authorization>
   <allow_users_to_change_authorization type="boolean">true</allow_users_to_change_authorization>
   <default_bcc_myself type="boolean">true</default_bcc_myself>

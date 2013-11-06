@@ -1,13 +1,11 @@
-require 'yaml'
 require 'curb'
-require "net/http"
-require "uri"
+require 'openssl'
+require 'net/http'
+require 'uri'
 require 'nokogiri'
-require "liquidfiles/version"
-require "liquidfiles/client"
+require 'liquidfiles/version'
+require 'liquidfiles/client'
+require 'liquidfiles/exceptions'
 
 module LiquidFiles
-  def self.version_string
-    "LiquidFiles version #{LiquidFiles::VERSION}"
-  end
 end

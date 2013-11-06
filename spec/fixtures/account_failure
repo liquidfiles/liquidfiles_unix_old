@@ -1,0 +1,18 @@
+HTTP/1.1 401 Unauthorized
+Server: nginx
+Date: Tue, 05 Nov 2013 19:30:31 GMT
+Content-Type: text/html; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+Status: 401 Unauthorized
+Strict-Transport-Security: max-age=604800
+X-UA-Compatible: IE=Edge,chrome=1
+Cache-Control: no-cache, private
+X-Request-Id: b47e69624ee6f1c1d12ebfe8ab36850d
+X-Runtime: 1.179613
+X-Rack-Cache: miss
+
+<?xml version="1.0" encoding="UTF-8"?>
+<error>
+  <message>Invalid API key</message>
+</error>

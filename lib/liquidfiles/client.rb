@@ -1,20 +1,55 @@
+require 'liquidfiles/validator'
+require 'liquidfiles/parser'
+
 module LiquidFiles
   class Client
-    
+    include LiquidFiles::Validator
+    include LiquidFiles::Parser
+
+    attr_reader :settings   
+
+ 
     def initialize(api_key, api_url="https://green.liquidfiles.net")
       @api_key = api_key
       @api_url = api_url
+      get_user_settings()
     end
 
     # Uploads provided files to server
     # files - array of paths to files to be uploaded
-    # returns array of server ids of filesi
+    # returns array of server ids of files
     def upload(files)
+      c = prepare_curl_request("attachments")    
+
+      # Upload one file at a time
+      files.map do |file|
+        c.http_post [Curl::PostField.file('Filedata', file)]
+        validate_response(c.body_str)
+        c.body_str
+      end
+    end
+
+    def message(recipients=[], subject="", message="", attachments=[])
+      http, request = prepare_http_request("message")
+
+      msg = build_message recipients,[],[],subject, message, attachments
+      request.body = msg
+      response = http.request(request)
+
+      return response.body
+    end
+
+    private
     
-      # Placeholder for ids of uploaded files
-      file_ids = []
-    
-      c = Curl::Easy.new "#{@api_url}/attachments" 
+    def get_user_settings
+      http, request = prepare_http_request("account")
+      response = http.request(request).body
+      validate_response response
+      parse_settings(response)
+    end
+
+    def prepare_curl_request(call)
+      c = Curl::Easy.new "#{@api_url}/#{call}" 
 
       c.http_auth_types = :basic
       c.username = @api_key
@@ -26,21 +61,12 @@ module LiquidFiles
       c.multipart_form_post = true
 
       c.verbose = true
-
-      # Upload one file at a time
-      files.each do |file|
-        post_data = []
-        post_data << Curl::PostField.file('Filedata', file)
-        c.http_post(post_data)
-        file_ids << c.body_str
-      end
-
-      return file_ids
+      
+      return c
     end
 
-    def message(recipients=[], subject="", message="", attachments=[])
-      uri = URI.parse("#{@api_url}/message")
-      
+    def prepare_http_request(call)
+      uri = URI.parse("#{@api_url}/#{call}")
 
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
@@ -48,17 +74,11 @@ module LiquidFiles
 
       request = Net::HTTP::Post.new(uri.request_uri)
       request.content_type = "text/xml"
-      msg = build_message recipients,[],[],subject, message, attachments
-      pp msg
-      request.body = msg
       request.basic_auth @api_key, 'x'
-      response = http.request(request)
+      
+      return http, request
+    end 
 
-      return response.body
-    end
-
-    private
-    
     def build_message(recipients=[], cc=[], bcc=[], subject="", message="", attachments=[])
       builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
           xml.message {
@@ -81,5 +101,6 @@ module LiquidFiles
       end
       builder.to_xml
     end
+
   end
 end

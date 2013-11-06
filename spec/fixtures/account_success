@@ -1,0 +1,49 @@
+HTTP/1.1 200 OK
+Server: nginx
+Date: Mon, 04 Nov 2013 20:39:15 GMT
+Content-Type: application/xml; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+Status: 200 OK
+Strict-Transport-Security: max-age=604800
+X-UA-Compatible: IE=Edge,chrome=1
+ETag: "25efd06eea74a984623dc58744bfbaa5"
+Cache-Control: must-revalidate, private, max-age=0
+Set-Cookie: _filetransfer_session=0156a4b65776a692307621e947e48b76; path=/; secure; HttpOnly
+X-Request-Id: 7ebc7592eab59db16f845cf9fd5a8602
+X-Runtime: 0.087881
+X-Rack-Cache: miss
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<user>
+  <api_version>3</api_version>
+  <version>v2.3.16</version>
+  <version_numeric type="integer">20316</version_numeric>
+  <api_client_size_override type="integer">10</api_client_size_override>
+  <max_expiration type="integer">180</max_expiration>
+  <max_file_size type="integer"></max_file_size>
+  <change_expiration type="boolean">true</change_expiration>
+  <default_file_expiration type="integer">30</default_file_expiration>
+  <accepted_filetypes></accepted_filetypes>
+  <blocked_extensions>exe, vbs, pif, scr, bat, cmd, com, cpl</blocked_extensions>
+  <default_authorization type="integer">0</default_authorization>
+  <allow_users_to_change_authorization type="boolean">true</allow_users_to_change_authorization>
+  <default_bcc_myself type="boolean">true</default_bcc_myself>
+  <can_override_size_limit type="boolean">true</can_override_size_limit>
+  <enable_send_folders type="boolean">true</enable_send_folders>
+  <api_enable_secure_send type="boolean">true</api_enable_secure_send>
+  <limit_recipient_domains type="boolean">true</limit_recipient_domains>
+  <can_send_to_local_users type="boolean">true</can_send_to_local_users>
+  <can_use_file_requests type="boolean">true</can_use_file_requests>
+  <recipients_domains type="array">
+  
+    <recipients_domain>gmail.com</recipients_domain>
+
+    <recipients_domain>hotmail.com</recipients_domain>
+[&quot;gmail.com&quot;, &quot;hotmail.com&quot;]  </recipients_domains>
+  <custom_settings>
+<![CDATA[
+DoNotUseTaskPane = 1
+]]>
+  </custom_settings>
+</user>

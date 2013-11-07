@@ -21,6 +21,8 @@ describe LiquidFiles do
 
     it "should fail when no recipients given" do
       @opts[:recipients] = nil
+      @opts[:cc] = nil
+      @opts[:bcc] = nil
       expect { subject.message @opts }.to raise_error ArgumentError, "Message must have recipients"
     end
 

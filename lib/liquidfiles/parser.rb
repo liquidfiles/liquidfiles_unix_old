@@ -27,6 +27,8 @@ module LiquidFiles
       @settings[:accepted_filetypes] = xml.user.accepted_filetypes.content.split ", "
       @settings[:blocked_extensions] = xml.user.blocked_extensions.content.split ", "
 
+      # Extract allowed recipients domains
+      @settings[:recipients_domains] = xml.user.recipients_domains.recipients_domain.map &:content
     end
 
   end

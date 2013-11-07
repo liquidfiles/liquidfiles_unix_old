@@ -42,8 +42,16 @@ module LiquidFiles
     end
 
     def validate_message_options(opts)
-      raise ArgumentError, "Provide ate least one file to upload." if (opts[:files].nil? or opts[:files].empty?) and (opts[:attachments].nil? or opts[:attachments].empty?)
-    
+      raise ArgumentError, "Message must have at least one file attached" if (opts[:files].nil? or opts[:files].empty?) and (opts[:attachments].nil? or opts[:attachments].empty?)
+      raise ArgumentError, "Message must have recipients" if opts[:recipients].nil? or opts[:recipients].empty?
+      raise ArgumentError, "Message body can't be empty" if opts[:message].nil? or opts[:message].empty?
+      raise ArgumentError, "Message subject can't be empty" if opts[:subject].nil? or opts[:subject].empty?
+
+      opts[:recipients].each do |recipient|
+        unless @settings[:recipients_domains].include? recipient.split('@').last
+          raise ArgumentError, "Message recipients emails can only be from allowed domains"
+        end
+      end
     end
 
   end

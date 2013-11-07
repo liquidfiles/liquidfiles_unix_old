@@ -26,6 +26,11 @@ describe LiquidFiles do
       expect { subject.message @opts }.to raise_error ArgumentError, "Message must have recipients"
     end
 
+    it "should fail when recipient email isnt properly formated" do
+      @opts[:cc] = ["tom.marvolo.riddle"]
+      expect { subject.message @opts }.to raise_error ArgumentError, "tom.marvolo.riddle is not a valid email"
+    end
+
     it "should fail when recipients email isnt in one of allowed domains" do
       @opts[:recipients] = ["tom@marvolo.riddle"]
       expect { subject.message @opts }.to raise_error ArgumentError, "Message recipients emails can only be from allowed domains"

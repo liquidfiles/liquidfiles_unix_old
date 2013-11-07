@@ -56,14 +56,20 @@ module LiquidFiles
         raise ArgumentError, "Message must have recipients" 
       end
 
+      # Check if provided emails are realy emails
       # Check if all recipients emails are from allowed domains.
       # Recipients, cc and bcc are joined; before that explicitely converted to arrays,
       # in case any of those options is nil
       (opts[:recipients].to_a+opts[:cc].to_a+opts[:bcc].to_a).each do |recipient|
+
+        raise ArgumentError, "#{recipient} is not a valid email" unless recipient =~ /.+@.+\..+/i
+
         unless @settings[:recipients_domains].include? recipient.split('@').last
           raise ArgumentError, "Message recipients emails can only be from allowed domains"
         end
+
       end
+
     end
 
   end

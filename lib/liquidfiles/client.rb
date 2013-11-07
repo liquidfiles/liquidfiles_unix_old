@@ -9,7 +9,7 @@ module LiquidFiles
     attr_reader :settings   
 
  
-    def initialize(api_key, api_url="https://green.liquidfiles.net")
+    def initialize(api_key, api_url="https://liquidfiles.net")
       @api_key = api_key
       @api_url = api_url
       get_user_settings()
@@ -18,6 +18,8 @@ module LiquidFiles
     # Uploads provided files to server
     # files - array of paths to files to be uploaded
     # returns array of server ids of files
+    # curl is used insted of net/http because of performance,
+    # no need to load files to Ruby
     def upload(files)
       
       validate_files(files)
@@ -32,10 +34,17 @@ module LiquidFiles
       end
     end
 
-    def message(recipients=[], subject="", message="", attachments=[])
+    #def message(recipients=[], subject="", message="", attachments=[])
+    def message(opts)
+      # validate provided options, fill in default values
+      options = validate_message_options opts
+
+      # upload provided files, unless already provided with ids of attachments
+      options[:attachments] ||= upload opts[:files]
+
       http, request = prepare_http_request("message")
 
-      msg = build_message recipients,[],[],subject, message, attachments
+      msg = build_message options
       request.body = msg
       response = http.request(request)
 
@@ -82,24 +91,25 @@ module LiquidFiles
       return http, request
     end 
 
-    def build_message(recipients=[], cc=[], bcc=[], subject="", message="", attachments=[])
+    #def build_message(recipients=[], cc=[], bcc=[], subject="", message="", attachments=[])
+    def build_message(options)
       builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
           xml.message {
             xml.recipients("type" => "array"){
-              recipients.each do |recipient|
+              options[:recipients].each do |recipient|
                 xml.recipient_ recipient
               end
             }
             xml.expires_at("type" => "date"){ (Time.now+7*24*60*60) }
-            xml.subject subject
-            xml.message message
+            xml.subject options[:subject]
+            xml.message options[:message]
             xml.attachments("type" => "array"){
-              attachments.each do |attachment_id|
+              options[:attachments].each do |attachment_id|
                 xml.attachment_ attachment_id
               end
             }
             xml.send_email "true"
-            xml.authorization 3
+            xml.authorization options[:authorization]
           }
       end
       builder.to_xml

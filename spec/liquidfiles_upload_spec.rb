@@ -33,7 +33,11 @@ describe LiquidFiles do
 
     end
 
-    it "should fail when file is too big"
+    it "should fail when file is too big" do
+      File.stub(:size) { 11 * 2**20 }
+      expect{ subject.upload([@file_txt]) }.to raise_error
+    end
+
     it "should return numeric id for each attached file" do
       expect( subject.upload([@file_txt, @file_txt]).length ).to be(2)
     end

@@ -11,7 +11,16 @@ def fixture(file)
 end
 
 def stub_api_call(verb, call, status=:success)
-  stub_request(verb, "https://foobarapikey:x@green.liquidfiles.net/#{call}").to_return(fixture("#{call}_#{status}"))
+  stub_request(verb, "https://foobarapikey:x@liquidfiles.net/#{call}").to_return(fixture("#{call}_#{status}"))
+end
+
+def options
+  {
+    subject: "This is test email subject.",
+    message: "This is test email body!",
+    files: [fixture_path + "/files/test.txt"],
+    recipients: ["test1@gmail.com", "test2@yahoo.com"]
+  }
 end
 
 RSpec.configure do |config|

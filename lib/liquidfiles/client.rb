@@ -36,11 +36,14 @@ module LiquidFiles
 
     #def message(recipients=[], subject="", message="", attachments=[])
     def message(opts)
-      # validate provided options, fill in default values
-      options = validate_message_options opts
+      # validate provided options
+      validate_message_options opts
+
+      # fill in opts with default values
+      options = fill_default_values opts
 
       # upload provided files, unless already provided with ids of attachments
-      options[:attachments] ||= upload opts[:files]
+      options[:attachments] ||= upload(opts[:files])
 
       http, request = prepare_http_request("message")
 
@@ -100,7 +103,7 @@ module LiquidFiles
                 xml.recipient_ recipient
               end
             }
-            xml.expires_at("type" => "date"){ (Time.now+7*24*60*60) }
+            xml.expires_at("type" => "date"){ (Time.now+options[:expires_at]*24*60*60).strftime "%Y-%m-%d" }
             xml.subject options[:subject]
             xml.message options[:message]
             xml.attachments("type" => "array"){
@@ -108,11 +111,18 @@ module LiquidFiles
                 xml.attachment_ attachment_id
               end
             }
-            xml.send_email "true"
+            xml.send_email options[:send_email]
             xml.authorization options[:authorization]
           }
       end
       builder.to_xml
+    end
+
+    def fill_default_values(options)
+      options[:expires_at] ||= @settings[:default_file_expiration]
+      options[:authorization] ||= @settings[:default_authorization]
+      options[:send_email] ||= true
+      options
     end
 
   end

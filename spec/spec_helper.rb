@@ -19,7 +19,10 @@ def options
     subject: "This is test email subject.",
     message: "This is test email body!",
     files: [fixture_path + "/files/test.txt"],
-    recipients: ["albus@gmail.com", "severus@hotmail.com"]
+    recipients: ["albus@gmail.com", "severus@hotmail.com"],
+    cc: [],
+    bcc: [],
+    attachments: nil
   }
 end
 

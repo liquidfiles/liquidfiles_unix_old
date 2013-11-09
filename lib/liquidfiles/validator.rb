@@ -50,7 +50,10 @@ module LiquidFiles
 
       raise ArgumentError, "Message body can't be empty" if opts[:message].nil? or opts[:message].empty?   
       raise ArgumentError, "Message subject can't be empty" if opts[:subject].nil? or opts[:subject].empty?
-     
+      raise ArgumentError, "Expiration must be lower that #{@settings[:max_expiration]} days" if opts[:expires_at] and opts[:expires_at] > @settings[:max_expiration]
+      raise ArgumentError, "Authorization must be either 0, 1, 2 or 3" if !opts[:authorization].nil? and !([0,1,2,3].include? opts[:authorization])
+
+
       # If message is missing recipients, ccs and bccs we should complain 
       if (opts[:recipients].nil? or opts[:recipients].empty?) and (opts[:cc].nil? or opts[:cc].empty?) and (opts[:bcc].nil? or opts[:bcc].empty?)
         raise ArgumentError, "Message must have recipients" 

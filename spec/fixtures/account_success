@@ -40,10 +40,4 @@ X-Rack-Cache: miss
     <recipients_domain>gmail.com</recipients_domain>
 
     <recipients_domain>hotmail.com</recipients_domain>
-[&quot;gmail.com&quot;, &quot;hotmail.com&quot;]  </recipients_domains>
-  <custom_settings>
-<![CDATA[
-DoNotUseTaskPane = 1
-]]>
-  </custom_settings>
-</user>
+</recipients_domains>

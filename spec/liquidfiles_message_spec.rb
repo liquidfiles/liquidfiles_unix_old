@@ -46,5 +46,21 @@ describe LiquidFiles do
       expect { subject.message @opts }.to raise_error ArgumentError, "Message subject can't be empty"
     end
 
+    it "should fail when expiration date is set highier that users max" do
+      @opts[:expires_at] = 200
+      expect { subject.message @opts }.to raise_error ArgumentError, "Expiration must be lower that 180 days"
+    end
+
+    it "should fail when authorization is no 0, 1, 2 or 3" do
+      @opts[:authorization] = 4
+      expect { subject.message @opts }.to raise_error ArgumentError, "Authorization must be either 0, 1, 2 or 3"
+    end
+
+    it "should send message if only correct cc recipients are given" do
+      @opts[:cc] = @opts[:recipient]
+      @opts[:recipient] = nil
+      expect { subject.message @opts }.not_to raise_error 
+    end
+
   end
 end

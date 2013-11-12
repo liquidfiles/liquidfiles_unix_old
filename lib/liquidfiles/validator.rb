@@ -1,12 +1,13 @@
 module LiquidFiles
   module Validator
+
     def validate_response(response)
       xml = Nokogiri::Slop(response)
       raise LiquidFiles::ApiError, xml.error.content if xml.css("error").first
     end
 
     def validate_files(files)
-      raise ArgumentError, "Provide ate least one file to upload." if files.empty?
+      raise ArgumentError, "Provide at least one file to upload." if files.empty?
 
       # if api providede list of blocked extensions
       # check each of provided files if it has any of those extention
@@ -55,7 +56,7 @@ module LiquidFiles
 
 
       # If message is missing recipients, ccs and bccs we should complain 
-      if (opts[:recipients].nil? or opts[:recipients].empty?) and (opts[:cc].nil? or opts[:cc].empty?) and (opts[:bcc].nil? or opts[:bcc].empty?)
+      if (opts[:recipients].nil? or opts[:recipients].empty?)
         raise ArgumentError, "Message must have recipients" 
       end
 

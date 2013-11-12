@@ -9,7 +9,8 @@ class LiquidFilesCLI < Thor
 
 
   desc "message", "Send message"
-  method_option :api_key, type: :string,  required:true, aliases:"-a"
+  method_option :api_key, type: :string,  required:true, aliases:"-a", desc: "API key for basic authentications"
+  method_option :server, type: :string, required: true, aliases: "-s", desc: "URL for LiquidFiles server"
   method_option :recipients, type: :array, required:true, aliases: "-r", desc: "List of emails of recipients of the message"
   method_option :cc, type: :array, required:true, desc: "List of emails of CC recipients of the message"
   method_option :bcc, type: :array, required:true, desc: "List of emails of BCC recipients of the message"
@@ -17,7 +18,8 @@ class LiquidFilesCLI < Thor
   method_option :message, type: :string, required:true, aliases: "-m", desc: "Message body"
   method_option :files, type: :array, required:true, aliases: "-f", desc: "Files that are going to be uploaded and become attachemts"
   method_option :expires_at, type: :numeric, required: false, desc: "Number of days after which the message should expire"
-  method_option :authorization, type: :numeric, required: false, desc: ""
+  method_option :authorization, type: :numeric, required: false, desc: "Level of authorization needed to access message"
+  method_option :insecure, type: :boolean, desc: "Permit invalid SSL cerificate."
 
   def message
     lc = LiquidFiles::Client.new options[:api_key]

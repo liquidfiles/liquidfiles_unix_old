@@ -9,9 +9,9 @@ module LiquidFiles
     attr_reader :settings   
 
  
-    def initialize(api_key, api_url="https://liquidfiles.net")
+    def initialize(api_key, api_url)
       @api_key = api_key
-      @api_url = api_url
+      @api_url = parse_https_url api_url
       get_user_settings()
     end
 

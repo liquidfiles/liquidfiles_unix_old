@@ -31,5 +31,10 @@ module LiquidFiles
       @settings[:recipients_domains] = xml.user.recipients_domains.recipients_domain.map &:content
     end
 
+    # allow both "example.com" and "(http|https)://example.com" as api url
+    def parse_https_url(url)
+      "https://"+url.split("://").last
+    end
+
   end
 end

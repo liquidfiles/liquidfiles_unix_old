@@ -26,4 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "curb"
   spec.add_runtime_dependency "thor"
   spec.add_runtime_dependency "nokogiri"
+  spec.add_runtime_dependency "gem-man"
+  spec.add_runtime_dependency "ronn"
 end

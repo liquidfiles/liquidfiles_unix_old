@@ -1,0 +1,17 @@
+liquidfiles(1) -- unix cli interface for LiquidFiles API
+=====================================================
+## SYNOPSIS
+`liquidfiles` <database_name><br>
+
+## DESCRIPTION
+**liquidfiles** is a simple command line tool that allows
+sending emails and files via LiquidFiles API
+
+## OPTIONS
+  * `-a`, `--api_key=<APK_KEY>`:
+    API key for LiquidFiles basic authentication. 
+  * `-u USER`:
+    Database username, in first.last format
+    `~/my.cnf` is not correct
+  * `-p PASSWORD`:
+    Database password

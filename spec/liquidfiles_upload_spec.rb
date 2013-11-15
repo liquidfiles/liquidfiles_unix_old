@@ -2,10 +2,11 @@ require 'spec_helper'
 
 describe LiquidFiles do
   describe "upload call" do
-    subject {LiquidFiles::Client.new("foobarapikey","https://liquidfiles.net")}
+    subject {LiquidFiles::Client.new(api_key: "foobarapikey", api_url: "https://liquidfiles.net")}
     before do
       @file_tar = fixture_path + "/files/test.tar"
       @file_txt = fixture_path + "/files/test.txt"
+      @file_none = fixture_path + "/files/test.none"
       stub_api_call(:post, "account",:"success")
       stub_api_call(:post, "attachments")
     end
@@ -16,6 +17,10 @@ describe LiquidFiles do
 
     it "should fail when file has prohibited extension" do
       expect { subject.upload([@file_tar]) }.to raise_error
+    end
+
+    it "should fail when file doesnt exits" do
+      expect { subject.upload([@file_none]) }.to raise_error
     end
 
     context "when allowed file types are provided" do

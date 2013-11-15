@@ -4,7 +4,7 @@ describe LiquidFiles::Client do
   describe "#new" do
     
     context "when correct api key is used" do 
-      subject {LiquidFiles::Client.new("foobarapikey","https://liquidfiles.net")}
+      subject {LiquidFiles::Client.new(api_key: "foobarapikey", api_url: "https://liquidfiles.net")}
    
       before do
         stub_api_call(:post, "account")
@@ -25,7 +25,7 @@ describe LiquidFiles::Client do
       end
 
       it "should throw exception" do
-        expect { LiquidFiles::Client.new("foobarapikey","https://liquidfiles.net") }.to raise_error LiquidFiles::ApiError
+        expect { LiquidFiles::Client.new(api_key: "foobarapikey",api_url: "https://liquidfiles.net") }.to raise_error LiquidFiles::ApiError
       end
     end
   end

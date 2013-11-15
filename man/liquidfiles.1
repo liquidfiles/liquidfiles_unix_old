@@ -7,24 +7,121 @@
 \fBliquidfiles\fR \- unix cli interface for LiquidFiles API
 .
 .SH "SYNOPSIS"
-\fBliquidfiles\fR \fIdatabase_name\fR
-.
-.br
+\fBliquidfiles [command] <arguments>\fR
 .
 .SH "DESCRIPTION"
 \fBliquidfiles\fR is a simple command line tool that allows sending emails and files via LiquidFiles API
 .
 .SH "OPTIONS"
+Options for command \fBmessage\fR:
+.
+.IP "\(bu" 4
+\fB\-a\fR, \fB\-\-api_key=<APK_KEY>\fR:
+.
+.br
+API key for LiquidFiles basic authentication\. \fIRequired\fR
+.
+.IP "\(bu" 4
+\fB\-s\fR, \fB\-\-server=<server URL>\fR:
+.
+.br
+Https url of Liquid Files server that will be used\. \fIRequired\fR
+.
+.IP "\(bu" 4
+\fB\-r\fR, \fB\-\-recipients=recipient1@example\.com recipient2@example\.com \.\.\.\fR:
+.
+.br
+List of recipients emails separated by spaces\. You must provide at least one recipient \fIRequired\fR
+.
+.IP "\(bu" 4
+\fB\-\-cc=recipient1@example\.com recipient2@example\.com \.\.\.\fR:
+.
+.br
+List of cc\'d recipients separated by spaces\.
+.
+.IP "\(bu" 4
+\fB\-\-bcc=recipient1@example\.com recipient2@example\.com \.\.\.\fR:
+.
+.br
+List of bcc\'d recipients
+.
+.IP "\(bu" 4
+\fB\-j\fR, \fB\-\-subject=SUBJECT\fR:
+.
+.br
+Subject of email message that will be sent\. \fIRequired\fR
+.
+.IP "\(bu" 4
+\fB\-b\fR, \fB\-\-body=SUBJECT\fR:
+.
+.br
+Body of email message that will be sent\. \fIRequired\fR
+.
+.IP "\(bu" 4
+\fB\-f\fR, \fB\-\-files=first_file second_file \.\.\.\fR:
+.
+.br
+Files that are going to be uploaded to server and become attachemts of the email message\. There must be at least one file provided\. \fIRequired\fR
+.
+.IP "\(bu" 4
+\fB\-\-expires\-at=N\fR:
+.
+.br
+Number of days after which the message should expire\. Must be a positive integer\.
+.
+.IP "\(bu" 4
+\fB\-\-authorization=N\fR:
+.
+.br
+Level of authorization needed to access attached files\. Possible levels of autorization:
+.
+.br
+0 \- Anyone can download
+.
+.br
+1 \- Anyone can download after authentication
+.
+.br
+2 \- Specified Recipients and local users can download
+.
+.br
+3 \- Only Specified Recipients can download
+.
+.br
+
+.
+.IP "\(bu" 4
+\fB\-\-insecure\fR:
+.
+.br
+This option allows insecure SSL connections and transfers\.
+.
+.IP "" 0
+.
+.SH "EXAMPLES:"
 .
 .TP
-\fB\-a\fR, \fB\-\-api_key=<APK_KEY>\fR
-API key for LiquidFiles basic authentication\.
+Basic usage, send 3 big files to 2 poeple:
+.
+.IP
+$ liquidfiles messalge \-a Your_API_key \-s https://example\.liquidfiles\.net \-\-recipients=bob@example\.com alice@example\.com \-f big_file_1 big_file_2 big_file_3 \-b "Hello World!" \-\-subject "Here are some files"
 .
 .TP
-\fB\-u USER\fR
-Database username, in first\.last format \fB~/my\.cnf\fR is not correct
+Use cat to create longer body of email
+$ cat <<EOF | liquidfiles messalge \-a Your_API_key \-s https://example\.liquidfiles\.net \-\-recipients=bob@example\.com alice@example\.com \-f big_file_1 big_file_2 big_file_3 \-b @\- \-\-subject "Here are some files"
 .
-.TP
-\fB\-p PASSWORD\fR
-Database password
+.br
+Hello,
+.
+.br
+I\'m sending you some secret big files\.
+.
+.br
+And also so much text\.
+.
+.br
+Cheers
+.
+.br
+EOF
 

@@ -1,17 +1,55 @@
 liquidfiles(1) -- unix cli interface for LiquidFiles API
 =====================================================
+
 ## SYNOPSIS
-`liquidfiles` <database_name><br>
+`liquidfiles [command] <arguments>`
 
 ## DESCRIPTION
 **liquidfiles** is a simple command line tool that allows
 sending emails and files via LiquidFiles API
 
 ## OPTIONS
-  * `-a`, `--api_key=<APK_KEY>`:
-    API key for LiquidFiles basic authentication. 
-  * `-u USER`:
-    Database username, in first.last format
-    `~/my.cnf` is not correct
-  * `-p PASSWORD`:
-    Database password
+
+Options for command `message`:
+
+  * `-a`, `--api_key=<APK_KEY>`:<br>
+    API key for LiquidFiles basic authentication. <Required>
+  * `-s`, `--server=<server URL>`: <br>
+    Https url of Liquid Files server that will be used. <Required>
+  * `-r`, `--recipients=recipient1@example.com recipient2@example.com ...`:<br>
+    List of recipients emails separated by spaces. You must provide at least one recipient <Required>
+  * `--cc=recipient1@example.com recipient2@example.com ...`:<br>
+    List of cc'd recipients separated by spaces.
+  * `--bcc=recipient1@example.com recipient2@example.com ...`:<br>
+    List of bcc'd recipients
+  * `-j`, `--subject=SUBJECT`:<br>
+    Subject of email message that will be sent. <Required>
+  * `-b`, `--body=SUBJECT`:<br>
+    Body of email message that will be sent. <Required>
+  * `-f`, `--files=first_file second_file ...`:<br>
+    Files that are going to be uploaded to server and become attachemts of the email message. There must be at least one file provided. <Required>
+  * `--expires-at=N`:<br>
+    Number of days after which the message should expire. Must be a positive integer.
+  * `--authorization=N`:<br>
+    Level of authorization needed to access attached files. Possible levels of autorization:<br>
+      0 - Anyone can download<br>
+      1 - Anyone can download after authentication<br>
+      2 - Specified Recipients and local users can download<br>
+      3 - Only Specified Recipients can download<br>
+  * `--insecure`: <br>
+    This option allows insecure SSL connections and transfers.
+
+
+## EXAMPLES:
+
+  * Basic usage, send 3 big files to 2 poeple:
+
+    $ liquidfiles messalge -a Your_API_key -s https://example.liquidfiles.net --recipients=bob@example.com alice@example.com -f big_file_1 big_file_2 big_file_3 -b "Hello World!" --subject "Here are some files"
+
+  * Use cat to create longer body of email:
+    $ cat <<EOF | liquidfiles message -a Your_API_key -s https://example.liquidfiles.net --recipients=bob@example.com alice@example.com -f big_file_1 big_file_2 big_file_3 -b @- --subject "Here are some files"<br>
+    Hello,<br>
+    I'm sending you some secret big files.<br>
+    And also so much text.<br>
+    Cheers<br>
+    EOF

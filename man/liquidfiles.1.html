@@ -57,6 +57,7 @@
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
     <a href="#OPTIONS">OPTIONS</a>
+    <a href="#EXAMPLES-">EXAMPLES:</a>
   </div>
 
   <ol class='man-decor man-head man head'>
@@ -72,7 +73,7 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>liquidfiles</code> <var>database_name</var><br /></p>
+<p><code>liquidfiles [command] &lt;arguments></code></p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
@@ -81,11 +82,50 @@ sending emails and files via LiquidFiles API</p>
 
 <h2 id="OPTIONS">OPTIONS</h2>
 
+<p>Options for command <code>message</code>:</p>
+
+<ul>
+<li><code>-a</code>, <code>--api_key=&lt;APK_KEY></code>:<br />
+API key for LiquidFiles basic authentication. <var>Required</var></li>
+<li><code>-s</code>, <code>--server=&lt;server URL></code>: <br />
+Https url of Liquid Files server that will be used. <var>Required</var></li>
+<li><code>-r</code>, <code>--recipients=recipient1@example.com recipient2@example.com ...</code>:<br />
+List of recipients emails separated by spaces. You must provide at least one recipient <var>Required</var></li>
+<li><code>--cc=recipient1@example.com recipient2@example.com ...</code>:<br />
+List of cc'd recipients separated by spaces.</li>
+<li><code>--bcc=recipient1@example.com recipient2@example.com ...</code>:<br />
+List of bcc'd recipients</li>
+<li><code>-j</code>, <code>--subject=SUBJECT</code>:<br />
+Subject of email message that will be sent. <var>Required</var></li>
+<li><code>-b</code>, <code>--body=SUBJECT</code>:<br />
+Body of email message that will be sent. <var>Required</var></li>
+<li><code>-f</code>, <code>--files=first_file second_file ...</code>:<br />
+Files that are going to be uploaded to server and become attachemts of the email message. There must be at least one file provided. <var>Required</var></li>
+<li><code>--expires-at=N</code>:<br />
+Number of days after which the message should expire. Must be a positive integer.</li>
+<li><code>--authorization=N</code>:<br />
+Level of authorization needed to access attached files. Possible levels of autorization:<br />
+  0 - Anyone can download<br />
+  1 - Anyone can download after authentication<br />
+  2 - Specified Recipients and local users can download<br />
+  3 - Only Specified Recipients can download<br /></li>
+<li><code>--insecure</code>: <br />
+This option allows insecure SSL connections and transfers.</li>
+</ul>
+
+
+<h2 id="EXAMPLES-">EXAMPLES:</h2>
+
 <dl>
-<dt><code>-a</code>, <code>--api_key=&lt;APK_KEY></code></dt><dd>API key for LiquidFiles basic authentication.</dd>
-<dt class="flush"><code>-u USER</code></dt><dd>Database username, in first.last format
-<code>~/my.cnf</code> is not correct</dd>
-<dt><code>-p PASSWORD</code></dt><dd>Database password</dd>
+<dt>Basic usage, send 3 big files to 2 poeple:</dt><dd><p></p>
+
+<p>$ liquidfiles messalge -a Your_API_key -s https://example.liquidfiles.net --recipients=bob@example.com alice@example.com -f big_file_1 big_file_2 big_file_3 -b "Hello World!" --subject "Here are some files"</p></dd>
+<dt>Use cat to create longer body of email</dt><dd><p>$ cat &lt;<EOF | liquidfiles messalge -a Your_API_key -s https://example.liquidfiles.net --recipients=bob@example.com alice@example.com -f big_file_1 big_file_2 big_file_3 -b @- --subject "Here are some files"<br />
+Hello,<br />
+I'm sending you some secret big files.<br />
+And also so much text.<br />
+Cheers<br />
+EOF</p></dd>
 </dl>
 
 

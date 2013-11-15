@@ -9,9 +9,10 @@ module LiquidFiles
     attr_reader :settings   
 
  
-    def initialize(api_key, api_url)
-      @api_key = api_key
-      @api_url = parse_https_url api_url
+    def initialize(options)
+      @api_key = options[:api_key]
+      @api_url = parse_https_url options[:api_url]
+      @insecure = options[:insecure]
       get_user_settings()
     end
 
@@ -51,7 +52,7 @@ module LiquidFiles
       request.body = msg
       response = http.request(request)
 
-      return response.body
+      return parse_message response.body
     end
 
     private
@@ -70,12 +71,13 @@ module LiquidFiles
       c.username = @api_key
       c.password = "x"
 
-      # Disable verification because of self-signed cert on green.liquidfiles.net
-      c.ssl_verify_host=false
-      c.ssl_verify_peer=false
+      if @insecure
+        c.ssl_verify_host=false
+        c.ssl_verify_peer=false
+      end
       c.multipart_form_post = true
 
-      c.verbose = true
+      c.verbose = false
       
       return c
     end
@@ -84,7 +86,7 @@ module LiquidFiles
       uri = URI.parse("#{@api_url}/#{call}")
 
       http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
+      http.use_ssl = true unless @insecure
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
       request = Net::HTTP::Post.new(uri.request_uri)
@@ -105,7 +107,7 @@ module LiquidFiles
             }
             xml.expires_at("type" => "date"){ (Time.now+options[:expires_at]*24*60*60).strftime "%Y-%m-%d" }
             xml.subject options[:subject]
-            xml.message options[:message]
+            xml.message options[:body]
             xml.attachments("type" => "array"){
               options[:attachments].each do |attachment_id|
                 xml.attachment_ attachment_id

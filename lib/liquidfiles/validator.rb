@@ -9,6 +9,8 @@ module LiquidFiles
     def validate_files(files)
       raise ArgumentError, "Provide at least one file to upload." if files.empty?
 
+      validate_file_existance files
+
       # if api providede list of blocked extensions
       # check each of provided files if it has any of those extention
       unless @settings[:blocked_extensions].empty?
@@ -46,18 +48,18 @@ module LiquidFiles
 
       # Check if either files to be uploded or attachment ids to be sent are set
       if (opts[:files].nil? or opts[:files].empty?) and (opts[:attachments].nil? or opts[:attachments].empty?)
-        raise ArgumentError, "Message must have at least one file attached"
+        raise ArgumentError, "Message must have at least one file attached."
       end
 
-      raise ArgumentError, "Message body can't be empty" if opts[:message].nil? or opts[:message].empty?   
-      raise ArgumentError, "Message subject can't be empty" if opts[:subject].nil? or opts[:subject].empty?
-      raise ArgumentError, "Expiration must be lower that #{@settings[:max_expiration]} days" if opts[:expires_at] and opts[:expires_at] > @settings[:max_expiration]
-      raise ArgumentError, "Authorization must be either 0, 1, 2 or 3" if !opts[:authorization].nil? and !([0,1,2,3].include? opts[:authorization])
+      raise ArgumentError, "Message body can't be empty." if opts[:body].nil? or opts[:body].empty?   
+      raise ArgumentError, "Message subject can't be empty." if opts[:subject].nil? or opts[:subject].empty?
+      raise ArgumentError, "Expiration must be lower that #{@settings[:max_expiration]} days." if opts[:expires_at] and opts[:expires_at] > @settings[:max_expiration]
+      raise ArgumentError, "Authorization must be either 0, 1, 2 or 3." if !opts[:authorization].nil? and !([0,1,2,3].include? opts[:authorization])
 
 
       # If message is missing recipients, ccs and bccs we should complain 
       if (opts[:recipients].nil? or opts[:recipients].empty?)
-        raise ArgumentError, "Message must have recipients" 
+        raise ArgumentError, "Message must have recipients." 
       end
 
       # Check if provided emails are realy emails
@@ -66,14 +68,20 @@ module LiquidFiles
       # in case any of those options is nil
       (opts[:recipients].to_a+opts[:cc].to_a+opts[:bcc].to_a).each do |recipient|
 
-        raise ArgumentError, "#{recipient} is not a valid email" unless recipient =~ /.+@.+\..+/i
+        raise ArgumentError, "#{recipient} is not a valid email." unless recipient =~ /.+@.+\..+/i
 
         unless @settings[:recipients_domains].include? recipient.split('@').last
-          raise ArgumentError, "Message recipients emails can only be from allowed domains"
+          raise ArgumentError, "Message recipients emails can only be from allowed domains."
         end
 
       end
 
+    end
+
+    def validate_file_existance files
+      (files||[]).each do |file|
+        raise ArgumentError, "File #{file} doesn't exist." unless File.exists? file
+      end
     end
 
   end

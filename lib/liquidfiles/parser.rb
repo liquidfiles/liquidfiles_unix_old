@@ -36,5 +36,9 @@ module LiquidFiles
       "https://"+url.split("://").last
     end
 
+    def parse_message c
+      Nokogiri::Slop c
+    end
+
   end
 end

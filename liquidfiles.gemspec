@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'liquidfiles/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "LiquidFiles"
+  spec.name          = "liquidfiles"
   spec.version       = LiquidFiles::VERSION
   spec.authors       = ["Marcin Harasimowicz"]
   spec.email         = ["support@liquidfiles.net"]

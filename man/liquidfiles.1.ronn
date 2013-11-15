@@ -14,7 +14,7 @@ Options for command `message`:
 
   * `-a`, `--api_key=<APK_KEY>`:<br>
     API key for LiquidFiles basic authentication. <Required>
-  * `-s`, `--server=<server URL>`: <br>
+  * `-s`, `--api_url=<server URL>`: <br>
     Https url of Liquid Files server that will be used. <Required>
   * `-r`, `--recipients=recipient1@example.com recipient2@example.com ...`:<br>
     List of recipients emails separated by spaces. You must provide at least one recipient <Required>
@@ -36,7 +36,7 @@ Options for command `message`:
       1 - Anyone can download after authentication<br>
       2 - Specified Recipients and local users can download<br>
       3 - Only Specified Recipients can download<br>
-  * `--insecure`: <br>
+  * `-k`, `--insecure`: <br>
     This option allows insecure SSL connections and transfers.
 
 

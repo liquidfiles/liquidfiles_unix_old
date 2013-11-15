@@ -86,7 +86,7 @@ module LiquidFiles
       uri = URI.parse("#{@api_url}/#{call}")
 
       http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true unless @insecure
+      http.use_ssl = true #unless @insecure
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
       request = Net::HTTP::Post.new(uri.request_uri)

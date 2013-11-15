@@ -1,5 +1,6 @@
 module LiquidFiles
   module Parser
+
     def parse_settings(response)
       @settings = {}
       # parse xml from reponse with Nokogiri Slop decorator
@@ -37,7 +38,15 @@ module LiquidFiles
     end
 
     def parse_message c
-      Nokogiri::Slop c
+      xml = Nokogiri::Slop c
+      return {
+        id: xml.html.body.message.id.text,
+        url: xml.html.body.message.url.text,
+        expires_at: xml.html.body.message.expires_at.text,
+        authorization: xml.html.body.message.authorization.text,
+        authorization_description: xml.html.body.message.authorization_description.text,
+        files: xml.html.body.message.table.tr[1..-1].map {|tds| {name: tds.td[0].text, size: tds.td[1].text, checksum: tds.td[2].text }}
+      }
     end
 
   end

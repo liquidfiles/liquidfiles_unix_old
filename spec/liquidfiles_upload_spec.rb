@@ -33,7 +33,7 @@ describe LiquidFiles do
       end
 
       it "should succeed when file has allowed file type" do
-        expect( subject.upload([@file_tar]) ).to eq(["183"])
+        expect( subject.upload([@file_tar]) ).to eq([[@file_tar,"183"]])
       end
 
     end

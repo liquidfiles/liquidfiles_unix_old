@@ -1,4 +1,4 @@
-module LiquidFiles
+module LiquidFiles # :nodoc: all
   module Parser
 
     def parse_settings(response)
@@ -47,6 +47,10 @@ module LiquidFiles
         authorization_description: xml.html.body.message.authorization_description.text,
         files: xml.html.body.message.table.tr[1..-1].map {|tds| {name: tds.td[0].text, size: tds.td[1].text, checksum: tds.td[2].text }}
       }
+    end
+
+    def parse_fliedrop_response c
+      puts c
     end
 
   end

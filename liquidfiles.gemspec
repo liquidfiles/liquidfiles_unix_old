@@ -28,4 +28,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "nokogiri"
   spec.add_runtime_dependency "gem-man"
   spec.add_runtime_dependency "ronn"
+  spec.add_runtime_dependency "ruby-progressbar"
 end

@@ -3,6 +3,7 @@
 require 'rubygems'
 require 'thor'
 require 'liquidfiles'
+require 'pp'
 
 class LiquidFilesCLI < Thor
 
@@ -24,7 +25,24 @@ class LiquidFilesCLI < Thor
     # convert Thor::CoreExt::HashWithIndifferentAccess to normal hash with symbols for keys
     opts =  Hash.new({}).merge!(options).inject({}){|memo,(k,v)| memo[k.to_sym] = v; memo}
     lc = LiquidFiles::Client.new opts
-    lc.message opts
+    pp lc.message opts
+  end
+
+  desc "filedrop", "Upload files to filedrop"
+  method_option :api_key, type: :string,  required: true, aliases:"-a", desc: "API key for basic authentications"
+  method_option :api_url, type: :string, required: true, aliases: "-s", desc: "URL for LiquidFiles server"
+  method_option :files, type: :array, required: true, aliases: "-f", desc: "Files that are going to be uploaded and become attachemts"  
+  method_option :name, type: :string, required: true, aliases: "-n", desc: "Name of filedrop to which upload files"
+  method_option :subject, type: :string, required: true, aliases: "-j", desc: "Message subject"
+  method_option :body, type: :string, required: true, aliases: "-b", desc: "Message body"
+  method_option :from, type: :string, required: true, aliases: "-r", desc: "Email of the message sender "
+  method_option :insecure, type: :boolean, aliases: "-k", desc: "Permit invalid SSL cerificate."
+  
+  def filedrop
+    # convert Thor::CoreExt::HashWithIndifferentAccess to normal hash with symbols for keys
+    opts =  Hash.new({}).merge!(options).inject({}){|memo,(k,v)| memo[k.to_sym] = v; memo}
+    lc = LiquidFiles::Client.new opts
+    pp lc.filedrop opts
   end
 
 end

@@ -1,7 +1,8 @@
 require 'liquidfiles/validator'
 require 'liquidfiles/parser'
 
-module LiquidFiles
+module LiquidFiles # :nodoc: 
+
   class Client
     include LiquidFiles::Validator
     include LiquidFiles::Parser
@@ -16,7 +17,7 @@ module LiquidFiles
       get_user_settings()
     end
 
-    # Uploads provided files to server
+    # Uploads provided files to the server.
     # files - array of paths to files to be uploaded
     # returns array of server ids of files
     # curl is used insted of net/http because of performance,
@@ -35,7 +36,7 @@ module LiquidFiles
       end
     end
 
-    #def message(recipients=[], subject="", message="", attachments=[])
+    # Send email massage 
     def message(opts)
       # validate provided options
       validate_message_options opts
@@ -49,10 +50,30 @@ module LiquidFiles
       http, request = prepare_http_request("message")
 
       msg = build_message options
-      request.body = msg
+      request.body = msg  
       response = http.request(request)
 
+      validate_response response.body
+
       return parse_message response.body
+    end
+
+    def filedrop(opts)
+      validate_filedrop_options opts
+      options = opts
+
+      # upload provided files, unless already provided with ids of attachments
+      options[:attachments] ||= upload(opts[:files])
+
+      http, request = prepare_http_request("filedrop/#{options[:name]}")
+
+      msg = build_filedrop options
+      request.body = msg  
+      response = http.request(request)
+
+      validate_response response.body
+
+      return parse_fliedrop_response response.body
     end
 
     private
@@ -115,6 +136,23 @@ module LiquidFiles
             }
             xml.send_email options[:send_email]
             xml.authorization options[:authorization]
+          }
+      end
+      builder.to_xml
+    end
+
+    def build_filedrop(options)
+      builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
+          xml.message {
+            xml.api_key options[:api_key]
+            xml.subject options[:subject]
+            xml.email options[:from]
+            xml.message options[:body]
+            xml.attachments("type" => "array"){
+              options[:attachments].each do |attachment_id|
+                xml.attachment_ attachment_id
+              end
+            }
           }
       end
       builder.to_xml

@@ -39,6 +39,18 @@ Options for command `message`:
   * `-k`, `--insecure`: <br>
     This option allows insecure SSL connections and transfers.
 
+Options for command `filedrop`:
+ 
+  * `-a`, `--api_key=<APK_KEY>`:<br>
+    API key for LiquidFiles basic authentication. <Required>
+  * `-s`, `--api_url=<server URL>`: <br>
+    Https url of Liquid Files server that will be used. <Required> 
+  * `-j`, `--subject=SUBJECT`:<br>
+    Subject of email message that will be sent. <Required>
+  * `-b`, `--body=SUBJECT`:<br>
+    Body of email message that will be sent. <Required>
+  * `-f`, `--files=first_file second_file ...`:<br>
+    Files that are going to be uploaded to server and become attachemts of the email message. There must be at least one file provided. <Required>
 
 ## EXAMPLES:
 

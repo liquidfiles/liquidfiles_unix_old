@@ -1,9 +1,9 @@
-module LiquidFiles
+module LiquidFiles # :nodoc: all
   module Validator
 
     def validate_response(response)
       xml = Nokogiri::Slop(response)
-      raise LiquidFiles::ApiError, xml.error.content if xml.css("error").first
+      raise LiquidFiles::ApiError, xml.css("error").first.text if xml.css("error").first
     end
 
     def validate_files(files)
@@ -76,6 +76,9 @@ module LiquidFiles
 
       end
 
+    end
+
+    def validate_filedrop_options(opts)
     end
 
     def validate_file_existance files

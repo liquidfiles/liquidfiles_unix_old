@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe LiquidFiles do
   describe "message call" do
-    subject {LiquidFiles::Client.new(api_key: "foobarapikey", api_url: "https://liquidfiles.net")}
+    subject {LiquidFiles::Client.new(api_key: "foobarapikey", url: "https://liquidfiles.net")}
 
     before do
       @file_tar = fixture_path + "/files/test.tar"

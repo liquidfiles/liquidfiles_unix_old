@@ -10,7 +10,7 @@ class LiquidFilesCLI < Thor
 
   desc "message", "Send email message to provided recipients with provided files as attachemnts."
   method_option :api_key, type: :string,  required: true, aliases:"-a", desc: "API key for basic authentications"
-  method_option :server_url, type: :string, required: true, aliases: "-s", desc: "URL for LiquidFiles server"
+  method_option :url, type: :string, required: true, aliases: "-s", desc: "URL for LiquidFiles server"
   method_option :recipients, type: :array, required: true, aliases: "-r", desc: "List of emails of recipients of the message"
   method_option :cc, type: :array, desc: "List of emails of CC recipients of the message"
   method_option :bcc, type: :array, desc: "List of emails of BCC recipients of the message"

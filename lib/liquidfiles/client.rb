@@ -19,7 +19,7 @@ module LiquidFiles # :nodoc:
         get_filedrop_settings()
       else
         @api_key = options[:api_key]
-        @api_url = parse_https_url options[:api_url]
+        @api_url = parse_https_url options[:url]
         get_user_settings()
       end
     end

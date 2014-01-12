@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Marcin Harasimowicz"]
   spec.email         = ["support@liquidfiles.net"]
   spec.description   = %q{ LiquidFiles.net CLI}
-  spec.summary       = ""
+  spec.summary       = "LiquidFiles.net CLI"
   spec.homepage      = "https://github.com/liquidfiles/liquidfiles_unix"
   spec.license       = "BSD"
 
@@ -19,14 +19,14 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.3"
-  spec.add_development_dependency "rake"
-  spec.add_development_dependency "rspec"
-  spec.add_development_dependency "webmock"
+  spec.add_development_dependency "rake", "~> 10.1"
+  spec.add_development_dependency "rspec", "~> 2.14"
+  spec.add_development_dependency "webmock", "~> 1.15"
 
-  spec.add_runtime_dependency "curb"
-  spec.add_runtime_dependency "thor"
-  spec.add_runtime_dependency "nokogiri"
-  spec.add_runtime_dependency "gem-man"
-  spec.add_runtime_dependency "ronn"
-  spec.add_runtime_dependency "ruby-progressbar"
+  spec.add_runtime_dependency "curb", "~> 0.8"
+  spec.add_runtime_dependency "thor", "~> 0.18"
+  spec.add_runtime_dependency "nokogiri", "~> 1.6"
+  spec.add_runtime_dependency "gem-man", "~> 0.3"
+  spec.add_runtime_dependency "ronn", "~> 0.7"
+  spec.add_runtime_dependency "ruby-progressbar", "~> 1.2"
 end

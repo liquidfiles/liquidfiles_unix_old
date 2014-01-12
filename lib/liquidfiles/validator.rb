@@ -13,28 +13,28 @@ module LiquidFiles # :nodoc: all
 
       # if api providede list of blocked extensions
       # check each of provided files if it has any of those extention
-      unless @settings[:blocked_extensions].empty?
+      unless @settings[:blocked_extensions].nil? or @settings[:blocked_extensions].empty?
         files.each do |file|
           # Extract file extension from file name
           file_ext = file.split(".").last
-          if @settings[:blocked_extensions].include? file_ext
+          if @settings[:blocked_extensions].any? {|extension| Regexp.new(extension) =~ file_ext}
             raise ArgumentError, "#{file_ext} is not allowed file extension."
           end
         end
       end
 
-      unless @settings[:accepted_filetypes].empty?
+      unless @settings[:accepted_filetypes].nil? or @settings[:accepted_filetypes].empty?
         files.each do |file|
           # Use unix 'file' tool to read files type
           file_type = IO.popen(["file", "--brief", "--mime-type", file]).read.chomp
-          unless @settings[:accepted_filetypes].include? file_type
+          unless @settings[:accepted_filetypes].any? {|type| Regexp.new(type) =~ file_type}
             raise ArgumentError, "#{file_type} is not accepted file type."
           end
         end
       end
 
 
-      if @settings[:max_file_size] > 0
+      if @settings[:max_file_size] and @settings[:max_file_size] > 0
         files.each do |file|
           # calculate file size in MB
           file_size = File.size(file).to_f / 2**20

@@ -11,10 +11,17 @@ module LiquidFiles # :nodoc:
 
  
     def initialize(options)
-      @api_key = options[:api_key]
-      @api_url = parse_https_url options[:api_url]
       @insecure = options[:insecure]
-      get_user_settings()
+      @mode = options[:mode]
+      if options[:mode] == :filedrop
+        @url = options[:url]
+        @api_url = options[:url]
+        get_filedrop_settings()
+      else
+        @api_key = options[:api_key]
+        @api_url = parse_https_url options[:api_url]
+        get_user_settings()
+      end
     end
 
     # Uploads provided files to the server.
@@ -58,14 +65,20 @@ module LiquidFiles # :nodoc:
       return parse_message response.body
     end
 
-    def filedrop(opts)
+    def filedrop_upload(opts)
       validate_filedrop_options opts
       options = opts
+
+      # extract only main part of url from filedrop settings
+      @api_url = /^\w+:\/\/[\d\w+\.]+/.match(@settings[:post_url])[0]
+      @api_key = @settings[:api_key]
 
       # upload provided files, unless already provided with ids of attachments
       options[:attachments] ||= upload(opts[:files])
 
-      http, request = prepare_http_request("filedrop/#{options[:name]}")
+      # update url with full url from filedrop settings
+      @api_url = @settings[:post_url]
+      http, request = prepare_http_request("")
 
       msg = build_filedrop options
       request.body = msg  
@@ -82,7 +95,14 @@ module LiquidFiles # :nodoc:
       http, request = prepare_http_request("account")
       response = http.request(request).body
       validate_response response
-      parse_settings(response)
+      parse_settings(response, :user)
+    end
+
+    def get_filedrop_settings
+      http, request = prepare_http_request("", true)
+      response = http.request(request).body
+      validate_response response
+      parse_settings(response, :filedrop)      
     end
 
     def prepare_curl_request(call)
@@ -103,7 +123,7 @@ module LiquidFiles # :nodoc:
       return c
     end
 
-    def prepare_http_request(call)
+    def prepare_http_request(call, no_auth = false)
       uri = URI.parse("#{@api_url}/#{call}")
 
       http = Net::HTTP.new(uri.host, uri.port)
@@ -112,7 +132,7 @@ module LiquidFiles # :nodoc:
 
       request = Net::HTTP::Post.new(uri.request_uri)
       request.content_type = "text/xml"
-      request.basic_auth @api_key, 'x'
+      request.basic_auth @api_key, 'x' unless no_auth
       
       return http, request
     end 
@@ -144,7 +164,7 @@ module LiquidFiles # :nodoc:
     def build_filedrop(options)
       builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
           xml.message {
-            xml.api_key options[:api_key]
+            xml.api_key @settings[:api_key]
             xml.subject options[:subject]
             xml.email options[:from]
             xml.message options[:body]

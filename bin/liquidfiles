@@ -10,7 +10,7 @@ class LiquidFilesCLI < Thor
 
   desc "message", "Send email message to provided recipients with provided files as attachemnts."
   method_option :api_key, type: :string,  required: true, aliases:"-a", desc: "API key for basic authentications"
-  method_option :api_url, type: :string, required: true, aliases: "-s", desc: "URL for LiquidFiles server"
+  method_option :server_url, type: :string, required: true, aliases: "-s", desc: "URL for LiquidFiles server"
   method_option :recipients, type: :array, required: true, aliases: "-r", desc: "List of emails of recipients of the message"
   method_option :cc, type: :array, desc: "List of emails of CC recipients of the message"
   method_option :bcc, type: :array, desc: "List of emails of BCC recipients of the message"
@@ -29,20 +29,18 @@ class LiquidFilesCLI < Thor
   end
 
   desc "filedrop", "Upload files to filedrop"
-  method_option :api_key, type: :string,  required: true, aliases:"-a", desc: "API key for basic authentications"
-  method_option :api_url, type: :string, required: true, aliases: "-s", desc: "URL for LiquidFiles server"
+  method_option :url, type: :string, required: true, aliases: "-s", desc: "URL for LiquidFiles filedrop"
   method_option :files, type: :array, required: true, aliases: "-f", desc: "Files that are going to be uploaded and become attachemts"  
-  method_option :name, type: :string, required: true, aliases: "-n", desc: "Name of filedrop to which upload files"
+  method_option :from, type: :string, required: true, aliases: "-r", desc: "Email of the sender"
   method_option :subject, type: :string, required: true, aliases: "-j", desc: "Message subject"
   method_option :body, type: :string, required: true, aliases: "-b", desc: "Message body"
-  method_option :from, type: :string, required: true, aliases: "-r", desc: "Email of the message sender "
   method_option :insecure, type: :boolean, aliases: "-k", desc: "Permit invalid SSL cerificate."
   
   def filedrop
     # convert Thor::CoreExt::HashWithIndifferentAccess to normal hash with symbols for keys
     opts =  Hash.new({}).merge!(options).inject({}){|memo,(k,v)| memo[k.to_sym] = v; memo}
-    lc = LiquidFiles::Client.new opts
-    pp lc.filedrop opts
+    lc = LiquidFiles::Client.new opts.merge({mode: :filedrop})
+    pp lc.filedrop_upload opts
   end
 
 end
